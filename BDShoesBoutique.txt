@@ -1,0 +1,97 @@
+﻿CREATE DATABASE `Shoes_boutique` DEFAULT CHARACTER SET = `utf8`;
+USE `Shoes_boutique`;
+
+
+
+
+
+
+CREATE TABLE `client` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `nom` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nom` (`nom`),
+  `prenom` varchar(255) NOT NULL DEFAULT '',
+  `mail` varchar(255) NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+
+
+CREATE TABLE `commande` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `numero` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+
+
+CREATE TABLE `couleur` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `nom` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+CREATE TABLE `modèle` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `nom` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+
+
+CREATE TABLE `chaussures` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `nom` varchar(255) NOT NULL DEFAULT '',
+  `nombre` int(11) unsigned NOT NULL,
+  `pointure` INT(11) NOT NULL DEFAULT '0',
+  `couleur` varchar(255) NOT NULL DEFAULT '',
+   
+  `modèle_id` int(1) unsigned NOT NULL,
+  `commande_id` int(11) unsigned NOT NULL,
+  `client_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_modèle` (`modèle_id`),
+  KEY `fk_commande` (`commande_id`),
+  KEY `fk_client` (`client_id`),
+  CONSTRAINT `fk_modèle` FOREIGN KEY (`modèle_id`) REFERENCES `modèle` (`id`),
+  CONSTRAINT `fk_commande` FOREIGN KEY (`commande_id`) REFERENCES `commande` (`id`),
+  CONSTRAINT `fk_client` FOREIGN KEY (`client_id`) REFERENCES `client` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+
+
+CREATE TABLE `couleur_modèle` (
+  `couleur_id` int(11) unsigned NOT NULL,
+  `modèle_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`couleur_id`,`modèle_id`),
+  KEY `fk_couleur_modèle_couleur_id` (`couleur_id`),
+  CONSTRAINT `fk_couleur_modèle_modèle_id` FOREIGN KEY (`modèle_id`) REFERENCES `modèle` (`id`),
+  CONSTRAINT `fk_couleur_modèle_couleur_id` FOREIGN KEY (`couleur_id`) REFERENCES `couleur` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+CREATE TABLE `commande_modèle` (
+  `commande_id` int(11) unsigned NOT NULL,
+  `modèle_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`commande_id`,`modèle_id`),
+  KEY `fk_commande_modèle_commande_id` (`commande_id`),
+  CONSTRAINT `fk_commande_modèle_modèle_id` FOREIGN KEY (`modèle_id`) REFERENCES `modèle` (`id`),
+  CONSTRAINT `fk_commande_modèle_commande_id` FOREIGN KEY (`commande_id`) REFERENCES `commande` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
